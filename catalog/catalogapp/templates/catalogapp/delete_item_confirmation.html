@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Confirm Item Delete{% endblock %}
+
+{% block page_content %}
+<div class="card text-center">
+  <div class="card-header">
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"><h3>Delete Item</h3></h5>
+    <p class="card-text">  Are you sure you want to delete? </p>
+    <form action="{{ url_for('catalogapp.delete_item', id = item['id']) }}" method="post">
+     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+     <button class="btn btn-danger" type="submit">Submit</button>
+    </form>
+    <div>
+      <a class="btn btn-success" href="{{ url_for('catalogapp.index') }}" role="button">Cancel</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

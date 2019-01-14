@@ -1,0 +1,64 @@
+{% extends "bootstrap/base.html"%}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Item Category{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('catalogapp.index') }}">Item Catalog(Github)</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('catalogapp.index') }}">Item Catalog(Home)</a></li>
+            {% if not current_user.is_authenticated %}
+            <li><a href="{{ url_for('google.login') }}">Login</a></li>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('catalogapp.add_category') }}">Add Category</a></li>
+            <li><a href="{{ url_for('catalogapp.json_endpoint') }}">Catalog JSON</a></li>
+
+            <li>
+              <form action="{{ url_for('catalogauth.logout') }}" class="navbar-form form-inline" method="GET">
+                <input type="hidden"  name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="submit" class="btn btn-link" value="Logout">
+              </form>
+            </li>
+            {% endif %}
+            {%  if current_user.is_authenticated and current_user.role == 'Admin'  %}
+            <li><a href="{{ url_for('catalogapp.admin_dashboard') }}">Admin Dashboard</a></li>
+            {% endif %}
+          </ul>
+          </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}

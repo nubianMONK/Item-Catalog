@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Category and Items{% endblock %}
+
+{% block page_content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col col-md-8">
+      {% if current_user.is_authenticated %}
+        {% if not all_categories %}
+          <p><strong>You need to create a Category prior to creating an Item!!!</strong></p>
+          <a class="btn btn-danger" href="{{ url_for('catalogapp.add_category') }}" role="button">Add Category</a><br>
+        {% endif %}
+      {% endif %}
+      <h3>Category</h3>
+      {% for category in all_categories %}
+      <div class="list-group">
+        <a href="{{ url_for('catalogapp.items_by_category', id = category['id']) }}" class="list-group-item list-group-item-action list-group-item-dark">{{ category['category_name'] }}</a>
+      </div>
+      {% endfor %}
+
+    </div>
+    <div class="col col-md-4">
+
+      {% if current_user.is_authenticated %}
+        {% if all_categories %}
+          <a class="btn btn-danger" href="{{ url_for('catalogapp.add_item') }}" role="button">Add Item</a><br>
+        {% endif %}
+      {% endif %}
+      <h3>Items</h3>
+      {% for item in all_items %}
+      <div class="list-group">
+        <a href="{{ url_for('catalogapp.item', id = item['id']) }}" class="list-group-item list-group-item-action list-group-item-info">{{ item['item_name'] }} {% if item %} ( {{ item['item_category']['category_name'] }} ) {% endif %}</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

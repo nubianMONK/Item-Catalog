@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Edit Items{% endblock %}
+
+{% block page_content %}
+<h3>Edit Item</h3>
+{{ wtf.quick_form(form, action= url_for('catalogapp.edit_item', id = item['id'] ), method="post") }}
+
+{% endblock %}
