@@ -48,6 +48,15 @@ def one_item(id):
     return sub_list
 
 
+# Check if user is creator of an item and return a boolean value
+def is_item_creator(id):
+    item = one_item(id)
+    if current_user.id == item['item_creator']['id']:
+        return True
+    else:
+        return False
+
+
 # Fetch Catalog Data via the Catalog RESTFUL API service
 def fetch_json(uri):
     resp = requests.get(uri)
@@ -104,6 +113,11 @@ def items_by_category(id):
 @bp.route('/catalog/category/item/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_item(id):
+
+    # Authorization check; Confirm logged in user is ITEM creator
+    if not is_item_creator(id):
+        abort(403, message="You are not authorized to edit this Item")
+        return
     # Instantiate a WTF Form
     form = EditItemForm(request.form)
     categories = all_categories()
@@ -185,6 +199,12 @@ def add_item():
 @bp.route('/catalog/category/item/<int:id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_item(id):
+
+    # Authorization check; Confirm logged in user is ITEM creator
+    if not is_item_creator(id):
+        abort(403, message="You are not authorized to edit this Item")
+        return
+
     # Fetch Item to be deleted via the helper function
     # which uses a RESTful API service
     item = one_item(id)

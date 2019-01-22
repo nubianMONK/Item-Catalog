@@ -3,5 +3,5 @@ from flask import Blueprint
 
 bp = Blueprint('catalogauth', __name__)
 
-# This is to avoid circular imports in flask
-from catalog.catalogauth import auth_views
+# Module is imported below.This is to avoid circular dependencies in flask
+from catalog.catalogauth import auth_views # noqa
