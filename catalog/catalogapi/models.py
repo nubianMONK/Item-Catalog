@@ -1,10 +1,8 @@
-# from catalog import login_manager
 from datetime import datetime
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
-from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
-from flask_login import (LoginManager, UserMixin, login_required,
-                         login_user, current_user, logout_user)
+from flask_dance.consumer.backend.sqla import (OAuthConsumerMixin)
+from flask_login import (LoginManager, UserMixin)
 
 
 convention = {
@@ -19,12 +17,6 @@ metadata = MetaData(naming_convention=convention)
 
 db = SQLAlchemy(metadata=metadata)
 login_manager = LoginManager()
-# login_manager.login_view = 'google.login'
-
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return db.session.query(User).get(user_id)
 
 
 class User(db.Model, UserMixin):
@@ -48,11 +40,6 @@ class OAuth(OAuthConsumerMixin, db.Model):
     provider_user_id = db.Column(db.String(256), unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
     user = db.relationship(User)
-
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return db.session.query(User).get(int(user_id))
 
 
 class Item(db.Model):
@@ -91,5 +78,4 @@ class Category(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    # return db.session.query(User).get(user_id)
     return User.query.get(int(user_id))
